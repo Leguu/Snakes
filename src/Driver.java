@@ -9,7 +9,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Driver {
-    private Board board;
+    private Board board = new Board();
     private Player[] players;
 
     Driver(int players) {
