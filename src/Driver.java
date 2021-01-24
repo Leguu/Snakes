@@ -9,7 +9,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Driver {
-    private Board board;
+    private Board board = new Board();
     private Player[] players;
 
     Driver(int players) {
@@ -39,7 +39,7 @@ public class Driver {
             String input = s.next();
             
             if (input.equals("d")) {
-                System.out.println(board);
+                board.display(players);
                 continue;
             }
             
