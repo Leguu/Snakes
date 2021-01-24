@@ -1,7 +1,5 @@
 <component name="CopyrightManager">
   <settings default="School">
-    <LanguageOptions name="__TEMPLATE__">
-      <option name="block" value="false" />
-    </LanguageOptions>
+    <LanguageOptions name="__TEMPLATE__" />
   </settings>
 </component>
