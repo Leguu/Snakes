@@ -35,14 +35,16 @@ public class Board {
         tiles[98] = 78;
     }
 
-    void display(Player[] players) {// First print the top row of labels, i.e., A B C...
+    void display(Player[] players) {
+        // First print the top row of labels, i.e., 1, 2, 3...
         System.out.print("  │");
         for (int i = 1; i <= 10; i += 1)
             System.out.printf("%2d│", i); // i + 64
         System.out.println();
+        // Print a divider.
         System.out.println("──┼──┼──┼──┼──┼──┼──┼──┼──┼──┼──┤");
 
-        // Next Go through every row and print the row number and its contents
+        // Next, go through every row and print the row number and its contents
         for (int i = 9; i >= 0; i -= 1) {
             // Print out label for the row
             System.out.printf("%2d│", i);
@@ -56,13 +58,16 @@ public class Board {
             System.out.print("\n  │");
 
             // Print out players.
+            // Sort the players with their positions ascending.
             Arrays.sort(players, Comparator.comparing(p -> p.position));
 
+            // Select every player which is in the current row and create a list.
             ArrayList<Player> current = new ArrayList<>();
             for (Player player : players)
                 if (i * 10 < player.position & player.position <= i * 10 + 10)
                     current.add(player);
 
+            // Print the players in the current row, making sure that the distances are printed correctly. 
             for (int id = 0; id < current.size(); id += 1) {
                 Player player = current.get(id);
                 Player previous = null;
@@ -76,6 +81,7 @@ public class Board {
                 System.out.printf("%s│", player.name.substring(0, 2));
             }
 
+            // Print out the remainder of the row... If the row has no players, then just print an empty row.
             if (current.size() > 0)
                 for (int j = 0; j < (i * 10 + 10) - current.get(current.size() - 1).position; j += 1)
                     System.out.print("  │");
