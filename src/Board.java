@@ -1,3 +1,8 @@
+// Asil Erturan (40164714) and Christian Jerjian (40031909)
+// COMP249
+// Assignment #1
+// 2020-02-05
+
 public class Board {
     // Contains the snakes / ladders
     int[] tiles;
@@ -22,7 +27,7 @@ public class Board {
         tiles[97] = 76;
         tiles[98] = 78;
     }
-    
+
     void display(Player[] players) {
         System.out.println("Something... Printing board");
     }
