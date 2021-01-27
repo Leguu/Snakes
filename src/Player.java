@@ -6,8 +6,32 @@
  */
 
 public class Player {
-    public int position;
-    public String name;
+    private int position;
+    private String name;
+    private int order;
+    
+    public void setPosition(int position) {
+    	this.position = position;
+    }
+    
+    public void setName(String name) {
+    	this.name = name;
+    }
+    
+    public void setOrder(int order) {
+    	this.order = order;
+    }
+    
+    public int getPosition() {
+    	return position;
+    }
+    public String getName() {
+    	return name;
+    }
+    public int getOrder() {
+    	return order;
+    }
+    
 
     public Player(int position, String name) {
         this.position = position;

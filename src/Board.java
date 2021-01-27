@@ -7,9 +7,17 @@
 
 public class Board {
     // Contains the snakes / ladders
-    int[] tiles;
+    private int[] tiles;
 
-    // Initialize players
+    public int[] getTiles() {
+		return tiles;
+	}
+
+	public void setTiles(int[] tiles) {
+		this.tiles = tiles;
+	}
+
+	// Initialize players    -> Constructor 
     public Board() {
         this.tiles = new int[100];
         tiles[1] = 20;
@@ -30,7 +38,7 @@ public class Board {
         tiles[98] = 78;
     }
 
-    void display(Player[] players) {
+    public void display(Player[] players) {
         System.out.println("Something... Printing board");
     }
 }
