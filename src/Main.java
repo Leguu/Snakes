@@ -5,23 +5,32 @@
  * 2020-02-05
  */
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-
-		Scanner s = new Scanner(System.in);		// for keyboard input
         System.out.println("--- Snakes and Ladders ---");
-        
-        
+
+        // for keyboard input
+        Scanner s = new Scanner(System.in);
+
         // Ask for player count
-        Driver.promptUser("How many players are you");
-        int playerCount = s.nextInt();
+        int playerCount = 0;
+
+        while (playerCount == 0) {
+            try {
+                Driver.promptUser("How many players are you");
+                playerCount = Integer.parseInt(s.next());
+            } catch (NumberFormatException e) {
+                System.out.println("Error: Please input a number");
+            }
+        }
 
         Driver game = new Driver(playerCount);
         game.play();
-        
+
 
         System.out.println("--- Program Terminated ---");
         s.close();
