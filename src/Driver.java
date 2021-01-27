@@ -39,7 +39,7 @@ public class Driver {
             String input = s.next();
             
             if (input.equals("d")) {
-                System.out.println(board);
+                board.display(players);
                 continue;
             }
             

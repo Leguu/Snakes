@@ -1,7 +1,3 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-
 /**
  * Asil Erturan (40164714) and Christian Jerjian (40031909)
  * COMP249
@@ -9,9 +5,13 @@ import java.util.Comparator;
  * 2020-02-05
  */
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+
 public class Board {
     // Contains the snakes / ladders
-    int[] tiles = new int[100];
+    int[] tiles = new int[101];
 
     // Initialize players
     public Board() {
@@ -26,9 +26,7 @@ public class Board {
         tiles[51] = 67;
         tiles[64] = 60;
         tiles[71] = 91;
-        // Changed this from 100 to 99, in order to display the board better.
-        // You shouldn't have 2 'win' tiles anyway.
-        tiles[80] = 99;
+        tiles[80] = 100;
         tiles[93] = 68;
         tiles[95] = 24;
         tiles[97] = 76;
@@ -36,30 +34,30 @@ public class Board {
     }
 
     void display(Player[] players) {
-        // First print the top row of labels, i.e., 1, 2, 3...
-        System.out.print("  │");
-        for (int i = 1; i <= 10; i += 1)
-            System.out.printf("%2d│", i); // i + 64
-        System.out.println();
         // Print a divider.
-        System.out.println("──┼──┼──┼──┼──┼──┼──┼──┼──┼──┼──┤");
+        System.out.println("┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐");
 
         // Next, go through every row and print the row number and its contents
         for (int i = 9; i >= 0; i -= 1) {
-            // Print out label for the row
-            System.out.printf("%2d│", i);
+            boolean reversed = i % 2 != 0;
 
+            System.out.print("│");
             // Print out the first row... i.e, the snakes and ladders
-            for (int j = i * 10 + 1; j <= i * 10 + 10; j += 1) {
-                if (tiles[j] > 0) System.out.printf("%2d│", tiles[j]);
-                else if (j == 100) System.out.print("WIN→");
-                else System.out.print("  │");
+            if (!reversed) for (int j = i * 10 + 1; j <= i * 10 + 10; j += 1) {
+                if (tiles[j] > 0) System.out.printf("%3d│", tiles[j]);
+                else System.out.print("   │");
             }
-            System.out.print("\n  │");
+            else for (int j = i * 10 + 10; j > i * 10; j -= 1) {
+                if (tiles[j] > 0) System.out.printf("%3d│", tiles[j]);
+                else if (j == 100) System.out.print("WIN│"); // Special Case for the 100th tile
+                else System.out.print("   │");
+            }
+            System.out.print("\n│");
 
             // Print out players.
-            // Sort the players with their positions ascending.
-            Arrays.sort(players, Comparator.comparing(p -> p.position));
+            // Sort the players with their positions ascending or descending, depending on whether the row is reversed.
+            if (reversed) Arrays.sort(players, Comparator.comparing(p -> -p.position));
+            else Arrays.sort(players, Comparator.comparing(p -> p.position));
 
             // Select every player which is in the current row and create a list.
             ArrayList<Player> current = new ArrayList<>();
@@ -73,25 +71,40 @@ public class Board {
                 Player previous = null;
                 if (id > 0) previous = current.get(id - 1);
 
-                for (int j = previous == null ? 1 : previous.position - (i * 10) + 1;
-                     j < player.position - i * 10;
-                     j += 1
+                if (!reversed) for (int j = previous == null ? 1 : previous.position - (i * 10) + 1;
+                                    j < player.position - i * 10;
+                                    j += 1
                 )
-                    System.out.print("  │");
-                System.out.printf("%s│", player.name.substring(0, 2));
+                    System.out.print("   │");
+                else for (int j = 1;
+                          j < (previous == null ? 1 : previous.position - player.position);
+                          j += 1
+                )
+                    System.out.print("   │");
+                System.out.printf("%s│", player.name.substring(0, 3));
             }
 
             // Print out the remainder of the row... If the row has no players, then just print an empty row.
             if (current.size() > 0)
-                for (int j = 0; j < (i * 10 + 10) - current.get(current.size() - 1).position; j += 1)
-                    System.out.print("  │");
-            else System.out.print("  │  │  │  │  │  │  │  │  │  │");
+                if (!reversed) for (int j = 0; j < (i * 10 + 10) - current.get(current.size() - 1).position; j += 1)
+                    System.out.print("   │");
+                else for (int j = current.get(current.size() - 1).position; j > i * 10 + 1; j -= 1)
+                    System.out.print("   │");
+            else System.out.print("   │   │   │   │   │   │   │   │   │   │");
 
             System.out.println();
 
+            // Print out row numbers
+            System.out.print("│");
+            if (reversed) for (int j = i * 10 + 10; j > i * 10; j -= 1)
+                System.out.printf("%3d│", j);
+            else for (int j = i * 10; j < i * 10 + 10; j += 1)
+                System.out.printf("%3d│", j + 1);
+            System.out.println();
+
             // Print out the separator or the bottom line.
-            if (i > 0) System.out.println("──┼──┼──┼──┼──┼──┼──┼──┼──┼──┼──┤");
-            else System.out.println("──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┘");
+            if (i > 0) System.out.println("├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤");
+            else System.out.println("└───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘");
         }
     }
 }
