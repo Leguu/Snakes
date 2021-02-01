@@ -37,6 +37,19 @@ public class Board {
         return tiles[player.position] > 0;
     }
 
+    void row(String left, String middle, String right) {
+        System.out.print(left);
+        for (int i = 0; i < 9; i += 1)
+            System.out.print(middle);
+        System.out.println(right);
+    }
+
+    void row(String middle, int amount) {
+        for (int i = 0; i < amount; i += 1)
+            System.out.print(middle);
+        System.out.println();
+    }
+
     void display(Player[] players) {
         // Print a divider.
         System.out.println("┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐");
@@ -74,6 +87,7 @@ public class Board {
                 Player player = current.get(id);
                 Player previous = null;
                 if (id > 0) previous = current.get(id - 1);
+                if (previous != null) if (previous.position == player.position) continue;
 
                 if (!reversed) for (int j = previous == null ? 1 : previous.position - (i * 10) + 1;
                                     j < player.position - i * 10;
@@ -90,13 +104,11 @@ public class Board {
 
             // Print out the remainder of the row... If the row has no players, then just print an empty row.
             if (current.size() > 0)
-                if (!reversed) for (int j = 0; j < (i * 10 + 10) - current.get(current.size() - 1).position; j += 1)
-                    System.out.print("   │");
-                else for (int j = current.get(current.size() - 1).position; j > i * 10 + 1; j -= 1)
-                    System.out.print("   │");
-            else System.out.print("   │   │   │   │   │   │   │   │   │   │");
-
-            System.out.println();
+                if (!reversed)
+                    row("   │", (i * 10 + 9) - current.get(current.size() - 1).position);
+                else
+                    row("   │", current.get(current.size() - 1).position - (i * 10 + 1));
+            else row("   │", 10);
 
             // Print out row numbers
             System.out.print("│");
@@ -107,8 +119,8 @@ public class Board {
             System.out.println();
 
             // Print out the separator or the bottom line.
-            if (i > 0) System.out.println("├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤");
-            else System.out.println("└───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘");
+            if (i > 0) row("├─", "──┼─", "──┤");
+            else row("└─", "──┴─", "──┘");
         }
     }
 }
