@@ -15,14 +15,14 @@ public class Player {
         this.name = name;
     }
 
-    public void doTurn(int dice) {
+    public void move(int dice) {
         position += dice;
 
         if (position > 100) {
-            int excessNumber = position - 100;
-            System.out.print(name + " has rolled " + dice + " on the " + (position - dice) + "th position");
-            position = 100 - excessNumber;
-            System.out.println(" which brings him/her back to the " + position + "th position");
+            int excess = position - 100;
+            System.out.printf("%s has rolled %d on position %d,", name, dice, position - dice);
+            position = 100 - excess;
+            System.out.printf(" which sends them back to position %d.", position);
         }
     }
 
