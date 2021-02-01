@@ -39,7 +39,6 @@ public class Driver {
 
     // Make a user order, and so on.
     public void setUpPlayers() {
-
         // Enter names
         for (int i = 0; i < players.length; i++) {
             promptUser("Player " + (i + 1) + ", enter your name");
@@ -115,7 +114,7 @@ public class Driver {
             player.doTurn(diceNumber);
 
             if (board.onLadder(player)) {
-                player.ladder(board.tiles[player.getPosition()]);
+                player.ladder(board);
             } else {
                 System.out.printf("%s went forward %d steps, now on position %d.\n",
                         player.name,

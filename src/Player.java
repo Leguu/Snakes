@@ -26,12 +26,13 @@ public class Player {
         }
     }
 
-    public void ladder(int position) {
+    public void ladder(Board board) {
+        int ladder = board.tiles[position];
         System.out.printf("Player %s stepped on a %s! Now on position %d.\n",
                 name,
-                position < this.position ? "snake" : "ladder",
-                position);
-        this.position = position;
+                ladder < position ? "snake" : "ladder",
+                ladder);
+        this.position = ladder;
     }
 
     public int getPosition() {
