@@ -8,10 +8,18 @@
 import java.util.Random;
 import java.util.Scanner;
 
+class GameEnd extends Exception {
+    Player player;
+
+    GameEnd(Player player) {
+        this.player = player;
+    }
+}
+
 public class Driver {
 
     private final Board board = new Board();
-    private Player[] players;
+    private final Player[] players;
 
     public Driver(int players) {
         this.players = new Player[players];
@@ -31,7 +39,6 @@ public class Driver {
 
     // Make a user order, and so on.
     public void setUpPlayers() {
-
         // Enter names
         for (int i = 0; i < players.length; i++) {
             promptUser("Player " + (i + 1) + ", enter your name");
@@ -92,7 +99,6 @@ public class Driver {
         while (rollForTie1 == rollForTie2);
     }
 
-
     public void assignDiceRoll() {
         for (Player player : players) {
             int diceNumber = flipDice();
@@ -101,23 +107,40 @@ public class Driver {
         }
     }
 
-    public void checkPlayerWin() {
+    void doRound() throws GameEnd {
         for (Player player : players) {
+            int diceNumber = flipDice();
+
+            player.doTurn(diceNumber);
+
+            if (board.onLadder(player)) {
+                player.ladder(board);
+            } else {
+                System.out.printf("%s went forward %d steps, now on position %d.\n",
+                        player.name,
+                        diceNumber,
+                        player.position
+                );
+            }
+
             if (player.position == 100) {
-                System.out.println(player.getName() + " won!");
-                System.exit(0);
+                throw new GameEnd(player);
             }
         }
     }
 
     public void play() {
+        Scanner s = new Scanner(System.in);
+        String input = "";
+
         while (true) {
-            Scanner s = new Scanner(System.in);
-            promptUser("Type 'd' to display the board, 'r' to roll the next turn, or 'q' to quit");
-            String input = s.next();
+            if (!input.equalsIgnoreCase("a")) {
+                promptUser("Type 'd' to display the board, 'r' to roll the next turn, 'a' to do all rounds, or 'q' to quit");
+                input = s.next();
+            }
 
             if (input.equalsIgnoreCase("d")) {
-                System.out.println(board);
+                board.display(players);
                 continue;
             }
 
@@ -126,60 +149,17 @@ public class Driver {
                 return;
             }
 
-            if (!input.equalsIgnoreCase("r")) {
+            if (!input.equalsIgnoreCase("r") && !input.equalsIgnoreCase("a")) {
                 System.out.println("That was invalid input!");
                 continue;
             }
 
-
-            boolean playerWin = false;
-            //------------------------------------ I need to put GETPOSITION--------------------------------------------
-
-            while (true) {
-                for (Player player : players) {
-
-                    int diceNumber = flipDice();
-
-                    player.setPosition((player.position) + diceNumber);
-
-                    if (player.getPosition() > 100) {
-                        int excessNumber = player.getPosition() - 100;
-                        System.out.print(player.getName() + " has rolled " + diceNumber + " on the " + (player.position - diceNumber) + "th position");
-                        player.setPosition(100 - excessNumber);
-                        System.out.println(" which brings him/her back to the " + (player.getPosition()) + "th position");
-                        checkPlayerWin();
-                    } else if (player.getPosition() < 100) {
-                        for (int j = 0; j < board.tiles.length; j++) {
-                            if ((board.tiles[j] > 0) && (j == player.getPosition())) {
-                                //got hit by a snake or ladder. set a new position
-                                int temp = player.getPosition();
-                                player.setPosition(board.tiles[j]);
-
-                                //hit by ladder
-                                if (temp < player.getPosition()) {
-                                    System.out.println(player.getName() + " got a dice value of " + diceNumber + " and stepped on a ladder; now in square " + (player.getPosition()));
-                                    checkPlayerWin();
-                                    break;
-                                }
-                                //hit by snake
-                                else if (temp > player.getPosition()) {
-                                    System.out.println(player.getName() + " got a dice value of " + diceNumber + " and stepped on a snake; now in square " + (player.getPosition()));
-                                    checkPlayerWin();
-                                    break;
-                                }
-
-                            } else if ((board.tiles[j] == 0) && (j == player.getPosition())) {
-                                System.out.println(player.getName() + " got a dice value of " + diceNumber + "; now in square " + (player.getPosition()));
-                                checkPlayerWin();
-                            }
-                        }
-                    } else {
-                        checkPlayerWin();
-                    }
-                }
+            try {
+                doRound();
+            } catch (GameEnd event) {
+                System.out.printf("Game is over! %s has won!\n", event.player.name);
+                return;
             }
-
-
         }
     }
 }

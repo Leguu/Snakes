@@ -33,6 +33,10 @@ public class Board {
         tiles[98] = 78;
     }
 
+    boolean onLadder(Player player) {
+        return tiles[player.position] > 0;
+    }
+
     void display(Player[] players) {
         // Print a divider.
         System.out.println("┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐");
@@ -81,7 +85,7 @@ public class Board {
                           j += 1
                 )
                     System.out.print("   │");
-                System.out.printf("%s│", player.name.substring(0, 3));
+                System.out.printf("%3s│", player.name.length() < 3 ? player.name : player.name.substring(0, 3));
             }
 
             // Print out the remainder of the row... If the row has no players, then just print an empty row.
