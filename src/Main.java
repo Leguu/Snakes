@@ -19,6 +19,7 @@ public class Main {
         // Ask for player count
         int playerCount = 0;
 
+//        ------------------------ Need to stop after 4 attempt, look at part 2. i think the best way to do this is to use for loop ----------------------------
         while (playerCount == 0) {
             try {
                 Driver.promptUser("How many players are you");
