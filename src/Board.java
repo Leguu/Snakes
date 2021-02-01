@@ -33,6 +33,10 @@ public class Board {
         tiles[98] = 78;
     }
 
+    boolean onLadder(Player player) {
+        return tiles[player.position] > 0;
+    }
+
     void display(Player[] players) {
         // Print a divider.
         System.out.println("┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐");
@@ -56,13 +60,13 @@ public class Board {
 
             // Print out players.
             // Sort the players with their positions ascending or descending, depending on whether the row is reversed.
-            if (reversed) Arrays.sort(players, Comparator.comparing(p -> -p.getPosition()));
-            else Arrays.sort(players, Comparator.comparing(Player::getPosition));
+            if (reversed) Arrays.sort(players, Comparator.comparing(p -> -p.position));
+            else Arrays.sort(players, Comparator.comparing(p -> p.position));
 
             // Select every player which is in the current row and create a list.
             ArrayList<Player> current = new ArrayList<>();
             for (Player player : players)
-                if (i * 10 < player.getPosition() & player.getPosition() <= i * 10 + 10)
+                if (i * 10 < player.position & player.position <= i * 10 + 10)
                     current.add(player);
 
             // Print the players in the current row, making sure that the distances are printed correctly. 
@@ -71,24 +75,24 @@ public class Board {
                 Player previous = null;
                 if (id > 0) previous = current.get(id - 1);
 
-                if (!reversed) for (int j = previous == null ? 1 : previous.getPosition() - (i * 10) + 1;
-                                    j < player.getPosition() - i * 10;
+                if (!reversed) for (int j = previous == null ? 1 : previous.position - (i * 10) + 1;
+                                    j < player.position - i * 10;
                                     j += 1
                 )
                     System.out.print("   │");
                 else for (int j = 1;
-                          j < (previous == null ? 1 : previous.getPosition() - player.getPosition());
+                          j < (previous == null ? 1 : previous.position - player.position);
                           j += 1
                 )
                     System.out.print("   │");
-                System.out.printf("%s│", player.getName().substring(0, 3));
+                System.out.printf("%3s│", player.name.length() < 3 ? player.name : player.name.substring(0, 3));
             }
 
             // Print out the remainder of the row... If the row has no players, then just print an empty row.
             if (current.size() > 0)
-                if (!reversed) for (int j = 0; j < (i * 10 + 10) - current.get(current.size() - 1).getPosition(); j += 1)
+                if (!reversed) for (int j = 0; j < (i * 10 + 10) - current.get(current.size() - 1).position; j += 1)
                     System.out.print("   │");
-                else for (int j = current.get(current.size() - 1).getPosition(); j > i * 10 + 1; j -= 1)
+                else for (int j = current.get(current.size() - 1).position; j > i * 10 + 1; j -= 1)
                     System.out.print("   │");
             else System.out.print("   │   │   │   │   │   │   │   │   │   │");
 

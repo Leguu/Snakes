@@ -6,27 +6,40 @@
  */
 
 public class Player {
-    private int position;
-    private String name;
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    int position;
+    String name;
+    int order;
 
     public Player(int position, String name) {
         this.position = position;
         this.name = name;
+    }
+
+    public void move(int dice) {
+        position += dice;
+
+        if (position > 100) {
+            int excess = position - 100;
+            System.out.printf("%s has rolled %d on position %d,", name, dice, position - dice);
+            position = 100 - excess;
+            System.out.printf(" which sends them back to position %d.", position);
+        }
+    }
+
+    public void ladder(Board board) {
+        int ladder = board.tiles[position];
+        System.out.printf("Player %s stepped on a %s! Now on position %d.\n",
+                name,
+                ladder < position ? "snake" : "ladder",
+                ladder);
+        this.position = ladder;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 }
