@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class Driver {
 
-    private Board board = new Board();
+    private final Board board = new Board();
     private Player[] players;
 
     public Driver(int players) {
@@ -60,8 +60,8 @@ public class Driver {
             }
         }
         System.out.print("Reached final decision on order of playing: ");
-        for (int i = 0; i < players.length; i++) {
-            System.out.print(players[i].getName() + ", ");
+        for (Player player : players) {
+            System.out.print(player.getName() + ", ");
         }
         System.out.println();
     }
@@ -94,20 +94,19 @@ public class Driver {
 
 
     public void assignDiceRoll() {
-        for (int i = 0; i < players.length; i++) {
+        for (Player player : players) {
             int diceNumber = flipDice();
-            System.out.println(players[i].getName() + " got a dice value of " + diceNumber);
-            players[i].setOrder(diceNumber);
+            System.out.println(player.getName() + " got a dice value of " + diceNumber);
+            player.setOrder(diceNumber);
         }
     }
 
     public void checkPlayerWin() {
-        for (int i = 0; i < players.length; i++) {
-            if(players[i].position == 100){
-                System.out.println(players[i].getName() + " won!");
+        for (Player player : players) {
+            if (player.position == 100) {
+                System.out.println(player.getName() + " won!");
                 System.exit(0);
             }
-
         }
     }
 
@@ -117,77 +116,70 @@ public class Driver {
             promptUser("Type 'd' to display the board, 'r' to roll the next turn, or 'q' to quit");
             String input = s.next();
 
-            if (input.equals("d")) {
+            if (input.equalsIgnoreCase("d")) {
                 System.out.println(board);
                 continue;
             }
 
-            if (input.equals("q")) {
+            if (input.equalsIgnoreCase("q")) {
                 System.out.println("Game ended prematurely!");
                 return;
             }
 
-            if (!input.equals("r")) {
+            if (!input.equalsIgnoreCase("r")) {
                 System.out.println("That was invalid input!");
                 continue;
             }
 
 
+            boolean playerWin = false;
+            //------------------------------------ I need to put GETPOSITION--------------------------------------------
 
-            if (input.equalsIgnoreCase("r")) {
+            while (true) {
+                for (Player player : players) {
 
-                boolean playerWin = false;
-                //------------------------------------ I need to put GETPOSITION--------------------------------------------
+                    int diceNumber = flipDice();
 
-                while (true) {
-                    for (int i = 0; i < players.length; i++) {
+                    player.setPosition((player.position) + diceNumber);
 
-                        int diceNumber = flipDice();
+                    if (player.getPosition() > 100) {
+                        int excessNumber = player.getPosition() - 100;
+                        System.out.print(player.getName() + " has rolled " + diceNumber + " on the " + (player.position - diceNumber) + "th position");
+                        player.setPosition(100 - excessNumber);
+                        System.out.println(" which brings him/her back to the " + (player.getPosition()) + "th position");
+                        checkPlayerWin();
+                    } else if (player.getPosition() < 100) {
+                        for (int j = 0; j < board.tiles.length; j++) {
+                            if ((board.tiles[j] > 0) && (j == player.getPosition())) {
+                                //got hit by a snake or ladder. set a new position
+                                int temp = player.getPosition();
+                                player.setPosition(board.tiles[j]);
 
-                        players[i].setPosition((players[i].position) + diceNumber);
-
-                        if (players[i].getPosition() > 100) {
-                            int excessNumber = players[i].getPosition() - 100;
-                            System.out.print(players[i].getName() + " has rolled " + diceNumber + " on the " + (players[i].position - diceNumber) + "th position");
-                            players[i].setPosition(100 - excessNumber);
-                            System.out.println(" which brings him/her back to the " + (players[i].getPosition()) + "th position");
-                            checkPlayerWin();
-                        }
-
-                        else if (players[i].getPosition() < 100) {
-                            for (int j = 0; j < board.tiles.length; j++) {
-                                if ((board.tiles[j] > 0) && (j == players[i].getPosition())) {
-                                    //got hit by a snake or ladder. set a new position
-                                    int temp = players[i].getPosition();
-                                    players[i].setPosition(board.tiles[j]);
-
-                                    //hit by ladder
-                                    if(temp < players[i].getPosition()){
-                                        System.out.println(players[i].getName() + " got a dice value of " + diceNumber + " and stepped on a ladder; now in square " + (players[i].getPosition()));
-                                        checkPlayerWin();
-                                        break;
-                                    }
-                                    //hit by snake
-                                    else if (temp > players[i].getPosition()){
-                                        System.out.println(players[i].getName() + " got a dice value of " + diceNumber + " and stepped on a snake; now in square " + (players[i].getPosition()));
-                                        checkPlayerWin();
-                                        break;
-                                    }
-
-                                }
-                                else if ((board.tiles[j] == 0) && (j == players[i].getPosition())){
-                                    System.out.println(players[i].getName() + " got a dice value of " + diceNumber + "; now in square " + (players[i].getPosition()));
+                                //hit by ladder
+                                if (temp < player.getPosition()) {
+                                    System.out.println(player.getName() + " got a dice value of " + diceNumber + " and stepped on a ladder; now in square " + (player.getPosition()));
                                     checkPlayerWin();
+                                    break;
                                 }
+                                //hit by snake
+                                else if (temp > player.getPosition()) {
+                                    System.out.println(player.getName() + " got a dice value of " + diceNumber + " and stepped on a snake; now in square " + (player.getPosition()));
+                                    checkPlayerWin();
+                                    break;
+                                }
+
+                            } else if ((board.tiles[j] == 0) && (j == player.getPosition())) {
+                                System.out.println(player.getName() + " got a dice value of " + diceNumber + "; now in square " + (player.getPosition()));
+                                checkPlayerWin();
                             }
                         }
-                        else {
-                            checkPlayerWin();
-                        }
+                    } else {
+                        checkPlayerWin();
                     }
                 }
-
             }
+
+
         }
     }
 }
