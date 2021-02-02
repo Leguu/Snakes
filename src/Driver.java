@@ -63,9 +63,7 @@ public class Driver {
         Arrays.sort(players, Comparator.comparing(p -> -p.order));
 
         // Solve ties
-        while (hasTie() != -1) {
-            solveTie(hasTie());
-        }
+        while (solveTies());
 
         // Print out order
         System.out.print("Reached final decision on order of playing: ");
@@ -75,20 +73,22 @@ public class Driver {
         System.out.printf("and %s.\n", players[players.length - 1].name);
     }
 
-    // Returns the index of a tie, or returns -1 if no ties were found.
-    int hasTie() {
+    // Should be used in an empty while loop.
+    // Solves the first tie it founds, and returns true if there may be more,
+    // or false if the array has no ties.
+    boolean solveTies() {
         for (int i = 0; i < players.length - 1; i++) {
             Player current = players[i];
             Player next = players[i + 1];
-            if (current.order == next.order) return i;
+            if (current.order == next.order) {
+                solveTie(current, next);
+                return true;
+            }
         }
-        return -1;
+        return false;
     }
 
-    void solveTie(int index) {
-        Player current = players[index];
-        Player next = players[index + 1];
-
+    void solveTie(Player current, Player next) {
         System.out.printf("A tie was achieved between %s and %s. Re-rolling...\n", current.name, next.name);
 
         int currentdice = flipDice();
@@ -97,8 +97,8 @@ public class Driver {
         System.out.printf("%s rolled a %d.\n", current.name, currentdice);
         System.out.printf("%s rolled a %d.\n", next.name, nextdice);
 
-        if (currentdice < nextdice) current.order -= 1;
-        else current.order += 1;
+        if (currentdice > nextdice) current.order += 1;
+        else current.order -= 1;
 
         Arrays.sort(players, Comparator.comparing(p -> -p.order));
     }
