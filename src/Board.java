@@ -11,7 +11,7 @@ import java.util.Comparator;
 
 public class Board {
     // Contains the snakes / ladders
-    int[] tiles = new int[101];
+    private final int[] tiles = new int[101];
 
     // Initialize players
     public Board() {
@@ -33,11 +33,15 @@ public class Board {
         tiles[98] = 78;
     }
 
-    boolean onLadder(Player player) {
+    public boolean onLadder(Player player) {
         return tiles[player.position] > 0;
     }
+    
+    public int getLadder(int position) {
+        return tiles[position];
+    }
 
-    void display(Player[] players) {
+    public void display(Player[] players) {
         // Print a divider.
         System.out.println("┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐");
 

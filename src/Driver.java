@@ -11,10 +11,10 @@ import java.util.Random;
 import java.util.Scanner;
 
 class GameEnd extends Exception {
-    Player player;
+    public Player winner;
 
-    GameEnd(Player player) {
-        this.player = player;
+    public GameEnd(Player winner) {
+        this.winner = winner;
     }
 }
 
@@ -51,19 +51,21 @@ public class Driver {
     }
 
     // Make a user order, and so on.
-    public void setOrder() {
+    private void setOrder() {
         System.out.println("Now deciding which player will start playing...");
 
         // Initialize order
         for (Player player : players) {
             int value = flipDice();
             System.out.printf("%s rolled a %d.\n", player.name, value);
-            player.setOrder(value * 10);
+            player.order = value * 10;
         }
         Arrays.sort(players, Comparator.comparing(p -> -p.order));
 
         // Solve ties
-        while (solveTies());
+        while (true) {
+            if (!solveTies()) break;
+        }
 
         // Print out order
         System.out.print("Reached final decision on order of playing: ");
@@ -73,10 +75,10 @@ public class Driver {
         System.out.printf("and %s.\n", players[players.length - 1].name);
     }
 
-    // Should be used in an empty while loop.
+    // Should be used in a while loop.
     // Solves the first tie it founds, and returns true if there may be more,
     // or false if the array has no ties.
-    boolean solveTies() {
+    private boolean solveTies() {
         for (int i = 0; i < players.length - 1; i++) {
             Player current = players[i];
             Player next = players[i + 1];
@@ -88,22 +90,22 @@ public class Driver {
         return false;
     }
 
-    void solveTie(Player current, Player next) {
+    private void solveTie(Player current, Player next) {
         System.out.printf("A tie was achieved between %s and %s. Re-rolling...\n", current.name, next.name);
 
-        int currentdice = flipDice();
-        int nextdice = flipDice();
+        int currentDice = flipDice();
+        int nextDice = flipDice();
 
-        System.out.printf("%s rolled a %d.\n", current.name, currentdice);
-        System.out.printf("%s rolled a %d.\n", next.name, nextdice);
+        System.out.printf("%s rolled a %d.\n", current.name, currentDice);
+        System.out.printf("%s rolled a %d.\n", next.name, nextDice);
 
-        if (currentdice > nextdice) current.order += 1;
+        if (currentDice > nextDice) current.order += 1;
         else current.order -= 1;
 
         Arrays.sort(players, Comparator.comparing(p -> -p.order));
     }
 
-    void doRound() throws GameEnd {
+    private void doRound() throws GameEnd {
         for (Player player : players) {
             int diceNumber = flipDice();
 
@@ -153,7 +155,7 @@ public class Driver {
             try {
                 doRound();
             } catch (GameEnd event) {
-                System.out.printf("Game is over! %s has won!\n", event.player.name);
+                System.out.printf("Game is over! %s has won!\n", event.winner.name);
                 return;
             }
         }
