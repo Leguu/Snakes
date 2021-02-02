@@ -5,6 +5,8 @@
  * 2020-02-05
  */
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -158,6 +160,16 @@ public class Driver {
                 doRound();
             } catch (GameEnd event) {
                 System.out.printf("Game is over! %s has won!\n", event.player.name);
+
+                // Print out order
+                Arrays.sort(players, Comparator.comparing(p -> -p.position));
+                System.out.print("The order of winners: ");
+                for (int i = 0; i < players.length - 1; i++) {
+                    System.out.printf("%s, ", players[i].name);
+                }
+                System.out.printf("and %s.\n", players[players.length - 1].name);
+
+                board.display(players);
                 return;
             }
         }
