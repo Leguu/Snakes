@@ -68,7 +68,7 @@ public class Driver {
         }
         System.out.print("Reached final decision on order of playing: ");
         for (Player player : players) {
-            System.out.print(player.getName() + ", ");
+            System.out.print(player.name + ", ");
         }
         System.out.println();
     }
@@ -77,11 +77,11 @@ public class Driver {
         int rollForTie1, rollForTie2;
 
         do {
-            System.out.println("A tie was achieved between " + players[j].getName() + " and " + players[j + 1].getName() + ". Attempting to break the tie");
+            System.out.println("A tie was achieved between " + players[j].name + " and " + players[j + 1].name + ". Attempting to break the tie");
             rollForTie1 = flipDice();
-            System.out.println(players[j].getName() + " got a dice value of " + rollForTie1);
+            System.out.println(players[j].name + " got a dice value of " + rollForTie1);
             rollForTie2 = flipDice();
-            System.out.println(players[j + 1].getName() + " got a dice value of " + rollForTie2);
+            System.out.println(players[j + 1].name + " got a dice value of " + rollForTie2);
 
             if (rollForTie1 > rollForTie2) {
                 //swap
@@ -102,7 +102,7 @@ public class Driver {
     public void assignDiceRoll() {
         for (Player player : players) {
             int diceNumber = flipDice();
-            System.out.println(player.getName() + " got a dice value of " + diceNumber);
+            System.out.println(player.name + " got a dice value of " + diceNumber);
             player.setOrder(diceNumber);
         }
     }
@@ -111,7 +111,7 @@ public class Driver {
         for (Player player : players) {
             int diceNumber = flipDice();
 
-            player.doTurn(diceNumber);
+            player.move(diceNumber);
 
             if (board.onLadder(player)) {
                 player.ladder(board);
