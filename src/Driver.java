@@ -5,6 +5,8 @@
  * 2020-02-05
  */
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -17,15 +19,26 @@ class GameEnd extends Exception {
 }
 
 public class Driver {
-
     private final Board board = new Board();
     private final Player[] players;
 
     public Driver(int players) {
         this.players = new Player[players];
-        setUpPlayers();
-    }
 
+        // Initialize players
+        for (int i = 0; i < this.players.length; i++) {
+            promptUser("Player " + (i + 1) + ", enter your name");
+
+            Scanner s = new Scanner(System.in);
+            String input = s.next();
+
+            this.players[i] = new Player(0, input);
+        }
+
+        board.display(this.players);
+
+        setOrder();
+    }
 
     public static int flipDice() {
         Random random = new Random();
@@ -38,73 +51,56 @@ public class Driver {
     }
 
     // Make a user order, and so on.
-    public void setUpPlayers() {
-        // Enter names
-        for (int i = 0; i < players.length; i++) {
-            promptUser("Player " + (i + 1) + ", enter your name");
+    public void setOrder() {
+        System.out.println("Now deciding which player will start playing...");
 
-            Scanner s = new Scanner(System.in);
-            String input = s.next();
+        // Initialize order
+        for (Player player : players) {
+            int value = flipDice();
+            System.out.printf("%s rolled a %d.\n", player.name, value);
+            player.setOrder(value * 10);
+        }
+        Arrays.sort(players, Comparator.comparing(p -> -p.order));
 
-            players[i] = new Player(0, input);
+        // Solve ties
+        while (hasTie() != -1) {
+            solveTie(hasTie());
         }
 
-        board.display(players);
-
-        System.out.println("Now deciding which player will start playing; ");
-
-        assignDiceRoll();
-
-        for (int i = 0; i < players.length - 1; i++) {
-            for (int j = 0; j < (players.length - i - 1); j++) {
-                if (players[j].getOrder() > players[j + 1].getOrder()) {
-                    Player temp = players[j];
-                    players[j] = players[j + 1];
-                    players[j + 1] = temp;
-                } else if (players[j].getOrder() == players[j + 1].getOrder()) {
-                    tie(j);
-                }
-            }
-        }
+        // Print out order
         System.out.print("Reached final decision on order of playing: ");
-        for (Player player : players) {
-            System.out.print(player.name + ", ");
+        for (int i = 0; i < players.length - 1; i++) {
+            System.out.printf("%s, ", players[i].name);
         }
-        System.out.println();
+        System.out.printf("and %s.\n", players[players.length - 1].name);
     }
 
-    public void tie(int j) {
-        int rollForTie1, rollForTie2;
-
-        do {
-            System.out.println("A tie was achieved between " + players[j].name + " and " + players[j + 1].name + ". Attempting to break the tie");
-            rollForTie1 = flipDice();
-            System.out.println(players[j].name + " got a dice value of " + rollForTie1);
-            rollForTie2 = flipDice();
-            System.out.println(players[j + 1].name + " got a dice value of " + rollForTie2);
-
-            if (rollForTie1 > rollForTie2) {
-                //swap
-                Player temp = players[j];
-                players[j] = players[j + 1];
-                players[j + 1] = temp;
-            } else if (rollForTie2 > rollForTie1) {
-                //swap
-                Player temp = players[j + 1];
-                players[j + 1] = players[j];
-                players[j] = temp;
-            }
-
+    // Returns the index of a tie, or returns -1 if no ties were found.
+    int hasTie() {
+        for (int i = 0; i < players.length - 1; i++) {
+            Player current = players[i];
+            Player next = players[i + 1];
+            if (current.order == next.order) return i;
         }
-        while (rollForTie1 == rollForTie2);
+        return -1;
     }
 
-    public void assignDiceRoll() {
-        for (Player player : players) {
-            int diceNumber = flipDice();
-            System.out.println(player.name + " got a dice value of " + diceNumber);
-            player.setOrder(diceNumber);
-        }
+    void solveTie(int index) {
+        Player current = players[index];
+        Player next = players[index + 1];
+
+        System.out.printf("A tie was achieved between %s and %s. Re-rolling...\n", current.name, next.name);
+
+        int currentdice = flipDice();
+        int nextdice = flipDice();
+
+        System.out.printf("%s rolled a %d.\n", current.name, currentdice);
+        System.out.printf("%s rolled a %d.\n", next.name, nextdice);
+
+        if (currentdice < nextdice) current.order -= 1;
+        else current.order += 1;
+
+        Arrays.sort(players, Comparator.comparing(p -> -p.order));
     }
 
     void doRound() throws GameEnd {
