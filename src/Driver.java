@@ -58,8 +58,11 @@ public class Driver {
         for (Player player : players) {
             int value = flipDice();
             System.out.printf("%s rolled a %d.\n", player.name, value);
+
+//-----------------------------------Why * 10, does it make it easier to sort ? ---------------------------------
             player.order = value * 10;
         }
+//---------------------------------- Please explain me what you did here lord Asil ------------------------------
         Arrays.sort(players, Comparator.comparing(p -> -p.order));
 
         // Solve ties
@@ -111,9 +114,18 @@ public class Driver {
 
             player.move(diceNumber);
 
-            if (board.onLadder(player)) {
+            if (player.position > 100) {
+                int originalPosition = player.position-diceNumber;
+                int excess = player.position - 100;
+                System.out.printf("%s has rolled %d on position %d,", player.name, diceNumber, originalPosition);
+                player.position = 100 - excess;
+                System.out.printf(" which sends them back to position %d. \n", player.position);
+            }
+
+            else if (board.onLadder(player)) {
                 player.ladder(board);
-            } else {
+            }
+            else {
                 System.out.printf("%s went forward %d steps, now on position %d.\n",
                         player.name,
                         diceNumber,

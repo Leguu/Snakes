@@ -18,26 +18,32 @@ public class Main {
         // Ask for player count
         int playerCount = 0;
 
+
         for (int attempts = 0; playerCount < 2 || 4 < playerCount; attempts += 1) {
-            // Why is this check a thing? Useless
+
             if (attempts == 4) {
                 System.out.println("Failed to enter player count 4 times. Exiting...");
-                return;
+                break;
             }
 
             Driver.promptUser("Input the number of players");
 
             try {
                 playerCount = Integer.parseInt(s.nextLine());
-                if (playerCount < 2 || 4 < playerCount)
+                if ((playerCount < 2 || 4 < playerCount) && attempts < 3)
+                    //if entered a number but it is not between 2 to 4
                     System.out.println("Please enter a number between 2 and 4.");
             } catch (NumberFormatException e) {
+                //if did NOT enter a number
                 System.out.println("Error: Please input a number");
             }
         }
 
-        Driver game = new Driver(playerCount);
-        game.play();
+        if (playerCount >= 2 && playerCount <= 4){
+            Driver game = new Driver(playerCount);
+            game.play();
+        }
+
 
         System.out.println("--- Program Terminated ---");
     }
