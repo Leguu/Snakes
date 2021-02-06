@@ -78,14 +78,15 @@ public class Board {
                 Player player = current.get(id);
                 Player previous = null;
                 if (id > 0) previous = current.get(id - 1);
+                if (previous != null) if (player.position == previous.position) continue;
 
                 if (!reversed) for (int j = previous == null ? 1 : previous.position - (i * 10) + 1;
                                     j < player.position - i * 10;
                                     j += 1
                 )
                     System.out.print("   │");
-                else for (int j = 1;
-                          j < (previous == null ? 1 : previous.position - player.position);
+                else for (int j = 0;
+                          j < (previous == null ? 10 - (player.position - (i * 10)) : previous.position - player.position - 1);
                           j += 1
                 )
                     System.out.print("   │");
@@ -96,7 +97,7 @@ public class Board {
             if (current.size() > 0)
                 if (!reversed) for (int j = 0; j < (i * 10 + 10) - current.get(current.size() - 1).position; j += 1)
                     System.out.print("   │");
-                else for (int j = current.get(current.size() - 1).position; j > i * 10 + 1; j -= 1)
+                else for (int j = 1; j < (current.get(current.size() - 1).position - (i * 10)); j += 1)
                     System.out.print("   │");
             else System.out.print("   │   │   │   │   │   │   │   │   │   │");
 
