@@ -1,4 +1,4 @@
-/**
+/*
  * Asil Erturan (40164714) and Christian Jerjian (40031909)
  * COMP249
  * Assignment #1
@@ -25,7 +25,7 @@ public class Main {
                 return;
             }
 
-            Driver.promptUser("How many players are you");
+            Driver.promptUser("Input the number of players");
 
             try {
                 playerCount = Integer.parseInt(s.nextLine());
