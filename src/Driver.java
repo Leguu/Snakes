@@ -161,15 +161,8 @@ public class Driver {
 
             player.move(diceNumber);
 
-            if (player.position > 100) {
-                int originalPosition = player.position-diceNumber;
-                int excess = player.position - 100;
-                System.out.printf("%s has rolled %d on position %d,", player.name, diceNumber, originalPosition);
-                player.position = 100 - excess;
-                System.out.printf(" which sends them back to position %d. \n", player.position);
-            }
 
-            else if (board.onLadder(player)) {
+            if (board.onLadder(player)) {
                 player.ladder(board);
             }
             else {

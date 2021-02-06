@@ -8,18 +8,17 @@
 import java.util.Scanner;
 
 /**
- *
  * The main class of the program where the program starts running.
  *
  * @author Asil Erturan (40164714) and Christian Jerjian (40031909)
  * @version 1
- *
  */
 public class Main {
 
     /**
      * The main method is where we find the player count and run the driver.
-     * @param args  ??????????????????????????????????????????????????????????????
+     *
+     * @param args ??????????????????????????????????????????????????????????????
      */
     public static void main(String[] args) {
         System.out.println("--- Snakes and Ladders ---");
@@ -35,7 +34,7 @@ public class Main {
 
             if (attempts == 4) {
                 System.out.println("Failed to enter player count 4 times. Exiting...");
-                break;
+                return;
             }
 
             Driver.promptUser("Input the number of players");
@@ -51,10 +50,9 @@ public class Main {
             }
         }
 
-        if (playerCount >= 2 && playerCount <= 4){
-            Driver game = new Driver(playerCount);
-            game.play();
-        }
+
+        Driver game = new Driver(playerCount);
+        game.play();
 
 
         System.out.println("--- Program Terminated ---");

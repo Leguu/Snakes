@@ -32,6 +32,12 @@ public class Player {
      */
     public void move(int dice) {
         position += dice;
+        if (position > 100) {
+            int excess = position - 100;
+            System.out.printf("%s has rolled %d on position %d,", name, dice, position-dice);
+            position = 100 - excess;
+            System.out.printf(" which sends them back to position %d. \n", position);
+        }
     }
 
 
