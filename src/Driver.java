@@ -10,14 +10,7 @@ import java.util.Comparator;
 import java.util.Random;
 import java.util.Scanner;
 
-/**
- *
- * GameEnd class which assigns the winning player to a new player calling winner.
- *
- * @author Asil Erturan (40164714) and Christian Jerjian (40031909)
- * @version 1
- *
- */
+
 class GameEnd extends Exception {
     public Player winner;
 
@@ -26,22 +19,12 @@ class GameEnd extends Exception {
     }
 }
 
-/**
- *
- * Driver class containing a board and a the player array.
- *
- * @author Asil Erturan (40164714) and Christian Jerjian (40031909)
- * @version 1
- *
- */
+
 public class Driver {
     private final Board board = new Board();
     private final Player[] players;
 
-    /**
-     * A parameterized constructor of the driver class. It creates an array of players and initializes player objects to this array.
-     * @param players The number of participating players
-     */
+
     public Driver(int players) {
         this.players = new Player[players];
 
@@ -60,28 +43,19 @@ public class Driver {
         setOrder();
     }
 
-    /**
-     * This method flips the dice and returns an integer value.
-     * @return A value between 1 to 6 to represent the coin flip
-     */
+
     public static int flipDice() {
         Random random = new Random();
         return random.nextInt(6) + 1;
     }
 
-    /**
-     * This method prompts the user to input a string.
-     * @param prompt The value inputed by user
-     */
+
     public static void promptUser(String prompt) {
         System.out.println(prompt + ": ");
         System.out.print("> ");
     }
 
-    /**
-     * This method makes a user order based on their flip dice. If multiple users get the same dice number, the solveTie() method will be triggered. The method also prints out the order of players.
-     *
-     */
+
     private void setOrder() {
         System.out.println("Now deciding which player will start playing...");
 
@@ -113,10 +87,7 @@ public class Driver {
     // Solves the first tie it founds, and returns true if there may be more,
     // or false if the array has no ties.
 
-    /**
-     * This method solves the first tie it finds, and returns true if there are other ties in the setOrder().
-     * @return A boolean value is returned based on wheter the tie has been solved
-     */
+
     private boolean solveTies() {
         for (int i = 0; i < players.length - 1; i++) {
             Player current = players[i];
@@ -130,11 +101,6 @@ public class Driver {
     }
 
 
-    /**
-     * This method solves the following ties after the first one and solves ties between the current and the preceding player. This method also sorts the player array based on each player's order.
-     * @param current A player object which represents the current player
-     * @param next  A player object representing the preceding player
-     */
     private void solveTie(Player current, Player next) {
         System.out.printf("A tie was achieved between %s and %s. Re-rolling...\n", current.name, next.name);
 
@@ -151,10 +117,6 @@ public class Driver {
     }
 
 
-    /**
-     * This method does 1 round of flip dice to each players, move the players to the new positions while taking into considerations snakes and ladders.
-     * @throws GameEnd ?????????????????????????????????????????????????????????????
-     */
     private void doRound() throws GameEnd {
         for (Player player : players) {
             int diceNumber = flipDice();
@@ -186,9 +148,7 @@ public class Driver {
         }
     }
 
-    /**
-     * This method asks for an input from the users and gives the choice between displaying the board, roll for the next turn, or quit the program.
-     */
+
     public void play() {
         Scanner s = new Scanner(System.in);
         String input = "";
