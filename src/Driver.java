@@ -82,11 +82,6 @@ public class Driver {
         System.out.printf("and %s.\n", players[players.length - 1].name);
     }
 
-    // Should be used in a while loop.
-    // Solves the first tie it founds, and returns true if there may be more,
-    // or false if the array has no ties.
-
-
     private boolean solveTies() {
         for (int i = 0; i < players.length - 1; i++) {
             Player current = players[i];
