@@ -19,8 +19,26 @@ public class Player {
     }
 
 
-    public void move(int dice) {
+    public void move(int dice, Board aBoard) {
         position += dice;
+        if (position > 100) {
+            int originalPosition = position-dice;
+            int excess = position - 100;
+            System.out.printf("%s has rolled %d on position %d,", name, dice, originalPosition);
+            position = 100 - excess;
+            System.out.printf(" which sends them back to position %d. \n", position);
+        }
+
+        else if (aBoard.onLadder(this)) {
+            ladder(aBoard);
+        }
+        else {
+            System.out.printf("%s went forward %d steps, now on position %d.\n",
+                    name,
+                    dice,
+                    position
+            );
+        }
     }
 
 

@@ -121,26 +121,8 @@ public class Driver {
         for (Player player : players) {
             int diceNumber = flipDice();
 
-            player.move(diceNumber);
+            player.move(diceNumber, board);
 
-            if (player.position > 100) {
-                int originalPosition = player.position-diceNumber;
-                int excess = player.position - 100;
-                System.out.printf("%s has rolled %d on position %d,", player.name, diceNumber, originalPosition);
-                player.position = 100 - excess;
-                System.out.printf(" which sends them back to position %d. \n", player.position);
-            }
-
-            else if (board.onLadder(player)) {
-                player.ladder(board);
-            }
-            else {
-                System.out.printf("%s went forward %d steps, now on position %d.\n",
-                        player.name,
-                        diceNumber,
-                        player.position
-                );
-            }
 
             if (player.position == 100) {
                 throw new GameEnd(player);
