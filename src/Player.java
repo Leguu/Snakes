@@ -7,8 +7,6 @@
 
 /**
  * The player class where the blueprint for each player is set. It has for variables the position, name and order of the player.
- * @author Asil Erturan (40164714) and Christian Jerjian (40031909)
- * @version 1
  */
 public class Player {
     public int position;

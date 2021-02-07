@@ -9,9 +9,6 @@ import java.util.Scanner;
 
 /**
  * The main class of the program where the program starts running.
- *
- * @author Asil Erturan (40164714) and Christian Jerjian (40031909)
- * @version 1
  */
 public class Main {
 
