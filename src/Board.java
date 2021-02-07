@@ -14,6 +14,7 @@ public class Board {
     private final int[] tiles = new int[101];
 
     // Initialize players
+
     public Board() {
         tiles[1] = 20;
         tiles[4] = 14;
@@ -33,13 +34,16 @@ public class Board {
         tiles[98] = 78;
     }
 
+
     public boolean onLadder(Player player) {
         return tiles[player.position] > 0;
     }
-    
+
+
     public int getLadder(int position) {
         return tiles[position];
     }
+
 
     public void display(Player[] players) {
         // Print a divider.

@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.Random;
 import java.util.Scanner;
 
+
 class GameEnd extends Exception {
     public Player winner;
 
@@ -18,9 +19,11 @@ class GameEnd extends Exception {
     }
 }
 
+
 public class Driver {
     private final Board board = new Board();
     private final Player[] players;
+
 
     public Driver(int players) {
         this.players = new Player[players];
@@ -40,17 +43,19 @@ public class Driver {
         setOrder();
     }
 
+
     public static int flipDice() {
         Random random = new Random();
         return random.nextInt(6) + 1;
     }
+
 
     public static void promptUser(String prompt) {
         System.out.println(prompt + ": ");
         System.out.print("> ");
     }
 
-    // Make a user order, and so on.
+
     private void setOrder() {
         System.out.println("Now deciding which player will start playing...");
 
@@ -58,8 +63,10 @@ public class Driver {
         for (Player player : players) {
             int value = flipDice();
             System.out.printf("%s rolled a %d.\n", player.name, value);
+
             player.order = value * 10;
         }
+
         Arrays.sort(players, Comparator.comparing(p -> -p.order));
 
         // Solve ties
@@ -75,9 +82,6 @@ public class Driver {
         System.out.printf("and %s.\n", players[players.length - 1].name);
     }
 
-    // Should be used in a while loop.
-    // Solves the first tie it founds, and returns true if there may be more,
-    // or false if the array has no ties.
     private boolean solveTies() {
         for (int i = 0; i < players.length - 1; i++) {
             Player current = players[i];
@@ -89,6 +93,7 @@ public class Driver {
         }
         return false;
     }
+
 
     private void solveTie(Player current, Player next) {
         System.out.printf("A tie was achieved between %s and %s. Re-rolling...\n", current.name, next.name);
@@ -105,27 +110,20 @@ public class Driver {
         Arrays.sort(players, Comparator.comparing(p -> -p.order));
     }
 
+
     private void doRound() throws GameEnd {
         for (Player player : players) {
             int diceNumber = flipDice();
 
-            player.move(diceNumber);
+            player.move(diceNumber, board);
 
-            if (board.onLadder(player)) {
-                player.ladder(board);
-            } else {
-                System.out.printf("%s went forward %d steps, now on position %d.\n",
-                        player.name,
-                        diceNumber,
-                        player.position
-                );
-            }
 
             if (player.position == 100) {
                 throw new GameEnd(player);
             }
         }
     }
+
 
     public void play() {
         Scanner s = new Scanner(System.in);
@@ -155,7 +153,7 @@ public class Driver {
             try {
                 doRound();
             } catch (GameEnd event) {
-                System.out.printf("Game is over! %s has won!\n", event.player.name);
+                System.out.printf("Game is over! %s has won!\n", event.winner.name);
 
                 // Print out order
                 Arrays.sort(players, Comparator.comparing(p -> -p.position));
