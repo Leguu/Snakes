@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
-
-
 public class Board {
     // Contains the snakes / ladders
     private final int[] tiles = new int[101];

@@ -64,10 +64,9 @@ public class Driver {
             int value = flipDice();
             System.out.printf("%s rolled a %d.\n", player.name, value);
 
-//-----------------------------------Why * 10, does it make it easier to sort ? ---------------------------------
             player.order = value * 10;
         }
-//---------------------------------- Please explain me what you did here lord Asil ------------------------------
+
         Arrays.sort(players, Comparator.comparing(p -> -p.order));
 
         // Solve ties
