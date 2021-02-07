@@ -2,7 +2,7 @@
  * Asil Erturan (40164714) and Christian Jerjian (40031909)
  * COMP249
  * Assignment #1
- * 2020-02-05
+ * 2020-02-08
  */
 
 import java.util.Scanner;
@@ -14,6 +14,7 @@ public class Main {
 
     /**
      * The main method is where we find the player count and run the driver.
+     * @param args Command-line arguments.
      */
     public static void main(String[] args) {
         System.out.println("--- Snakes and Ladders ---");
@@ -25,7 +26,6 @@ public class Main {
         int playerCount = 0;
 
         for (int attempts = 0; playerCount < 2 || 4 < playerCount; attempts += 1) {
-
             if (attempts == 4) {
                 System.out.println("Failed to enter player count 4 times. Exiting...");
                 break;
@@ -48,7 +48,6 @@ public class Main {
             Driver game = new Driver(playerCount);
             game.play();
         }
-
 
         System.out.println("--- Program Terminated ---");
     }
