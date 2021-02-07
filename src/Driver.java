@@ -177,7 +177,7 @@ public class Driver {
             try {
                 doRound();
             } catch (GameEnd event) {
-                System.out.printf("Game is over! %s has won!\n", event.player.name);
+                System.out.printf("Game is over! %s has won!\n", event.winner.name);
 
                 // Print out order
                 Arrays.sort(players, Comparator.comparing(p -> -p.position));
