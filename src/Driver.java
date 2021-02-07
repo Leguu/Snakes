@@ -10,7 +10,9 @@ import java.util.Comparator;
 import java.util.Random;
 import java.util.Scanner;
 
-
+/**
+ * GameEnd class which assigns the winning player to a new player calling winner. The exception is thrown when a player is on top of the 100th tile.
+ */
 class GameEnd extends Exception {
     public Player winner;
 
@@ -19,12 +21,18 @@ class GameEnd extends Exception {
     }
 }
 
-
+/**
+ * Driver class containing a board and a the player array.
+ */
 public class Driver {
     private final Board board = new Board();
     private final Player[] players;
 
-
+    /**
+     * A parameterized constructor of the driver class. It creates an array of players and initializes player objects to this array.
+     *
+     * @param players The number of participating players
+     */
     public Driver(int players) {
         this.players = new Player[players];
 
@@ -43,19 +51,29 @@ public class Driver {
         setOrder();
     }
 
-
+    /**
+     * This method flips the dice and returns an integer value.
+     *
+     * @return A value between 1 to 6 to represent the coin flip
+     */
     public static int flipDice() {
         Random random = new Random();
         return random.nextInt(6) + 1;
     }
 
-
+    /**
+     * This method prompts the user to input a string.
+     *
+     * @param prompt The string displayed to the user
+     */
     public static void promptUser(String prompt) {
         System.out.println(prompt + ": ");
         System.out.print("> ");
     }
 
-
+    /**
+     * This method makes a user order based on their flip dice. If multiple users get the same dice number, the solveTie() method will be triggered. The method also prints out the order of players.
+     */
     private void setOrder() {
         System.out.println("Now deciding which player will start playing...");
 
@@ -63,10 +81,8 @@ public class Driver {
         for (Player player : players) {
             int value = flipDice();
             System.out.printf("%s rolled a %d.\n", player.name, value);
-
             player.order = value * 10;
         }
-
         Arrays.sort(players, Comparator.comparing(p -> -p.order));
 
         // Solve ties
@@ -82,6 +98,11 @@ public class Driver {
         System.out.printf("and %s.\n", players[players.length - 1].name);
     }
 
+    /**
+     * This method solves the first tie it encounters, and returns true if there are other ties in the setOrder().
+     *
+     * @return A boolean value is returned based on wheter the tie has been solved
+     */
     private boolean solveTies() {
         for (int i = 0; i < players.length - 1; i++) {
             Player current = players[i];
@@ -95,6 +116,12 @@ public class Driver {
     }
 
 
+    /**
+     * This methods runs through the player array and solves the tie between 2 players. This method also sorts the player array based on a descending order.
+     *
+     * @param current A player object which represents the current player
+     * @param next    A player object representing the proceeding player
+     */
     private void solveTie(Player current, Player next) {
         System.out.printf("A tie was achieved between %s and %s. Re-rolling...\n", current.name, next.name);
 
@@ -111,6 +138,11 @@ public class Driver {
     }
 
 
+    /**
+     * This method does 1 round of flip dice to each players, move the players to the new positions while taking into considerations snakes and ladders.
+     *
+     * @throws GameEnd Throws GameEnd when the win condition is detected
+     */
     private void doRound() throws GameEnd {
         for (Player player : players) {
             int diceNumber = flipDice();
@@ -124,7 +156,9 @@ public class Driver {
         }
     }
 
-
+    /**
+     * This method asks for an input from the users and gives the choice between displaying the board, roll for the next turn, or quit the program.
+     */
     public void play() {
         Scanner s = new Scanner(System.in);
         String input = "";
@@ -164,7 +198,7 @@ public class Driver {
                 System.out.printf("and %s.\n", players[players.length - 1].name);
 
                 board.display(players);
-              
+
                 return;
             }
         }

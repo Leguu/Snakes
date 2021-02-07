@@ -9,12 +9,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
+
+/**
+ * The board class containing all tiles, snakes, ladders positions as well as a display method.
+ */
 public class Board {
     // Contains the snakes / ladders
     private final int[] tiles = new int[101];
 
     // Initialize players
 
+    /**
+     * Default constructor of Board which initializes the snakes and ladders positions on the board. The tile position has a ladder if tile[i] is higher than the initial position.
+     * The tile position has a snake if tile[i] is lower than the initial position
+     */
     public Board() {
         tiles[1] = 20;
         tiles[4] = 14;
@@ -34,17 +42,28 @@ public class Board {
         tiles[98] = 78;
     }
 
-
+    /**
+     * This method returns a boolean which tells you whether or not a player stepped on a ladder or snake.
+     * @param player The player which may have stepped on a ladder or snake
+     * @return Returns true if player step on a ladder or snake, and return false if player did not step on a ladder or snake
+     */
     public boolean onLadder(Player player) {
         return tiles[player.position] > 0;
     }
 
-
+    /**
+     * This method returns the position where the ladder and snakes points to.
+     * @param position The position of ladder and snake
+     * @return returns the position of ladder and snake
+     */
     public int getLadder(int position) {
         return tiles[position];
     }
 
-
+    /**
+     * This method displays the function on the console.
+     * @param players This is the player array which will have their name represented on the display
+     */
     public void display(Player[] players) {
         // Print a divider.
         System.out.println("┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐");

@@ -7,10 +7,14 @@
 
 import java.util.Scanner;
 
-
+/**
+ * The main class of the program where the program starts running.
+ */
 public class Main {
 
-
+    /**
+     * The main method is where we find the player count and run the driver.
+     */
     public static void main(String[] args) {
         System.out.println("--- Snakes and Ladders ---");
 
@@ -19,7 +23,6 @@ public class Main {
 
         // Ask for player count
         int playerCount = 0;
-
 
         for (int attempts = 0; playerCount < 2 || 4 < playerCount; attempts += 1) {
 
@@ -32,7 +35,7 @@ public class Main {
 
             try {
                 playerCount = Integer.parseInt(s.nextLine());
-                if ((playerCount < 2 || 4 < playerCount) && attempts < 3)
+                if (playerCount < 2 || 4 < playerCount)
                     //if entered a number but it is not between 2 to 4
                     System.out.println("Please enter a number between 2 and 4.");
             } catch (NumberFormatException e) {
