@@ -23,9 +23,6 @@ class GameEnd extends Exception {
 
 /**
  * Driver class containing a board and a the player array.
- *
- * @author Asil Erturan (40164714) and Christian Jerjian (40031909)
- * @version 1
  */
 public class Driver {
     private final Board board = new Board();
@@ -102,10 +99,6 @@ public class Driver {
         }
         System.out.printf("and %s.\n", players[players.length - 1].name);
     }
-
-    // Should be used in a while loop.
-    // Solves the first tie it founds, and returns true if there may be more,
-    // or false if the array has no ties.
 
     /**
      * This method solves the first tie it encounters, and returns true if there are other ties in the setOrder().
