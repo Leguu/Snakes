@@ -11,12 +11,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 /**
- *
- * GameEnd class which assigns the winning player to a new player calling winner.
- *
- * @author Asil Erturan (40164714) and Christian Jerjian (40031909)
- * @version 1
- *
+ * GameEnd class which assigns the winning player to a new player calling winner. The exception is thrown when a player is on top of the 100th tile.
  */
 class GameEnd extends Exception {
     public Player winner;
@@ -27,12 +22,10 @@ class GameEnd extends Exception {
 }
 
 /**
- *
  * Driver class containing a board and a the player array.
  *
  * @author Asil Erturan (40164714) and Christian Jerjian (40031909)
  * @version 1
- *
  */
 public class Driver {
     private final Board board = new Board();
@@ -40,6 +33,7 @@ public class Driver {
 
     /**
      * A parameterized constructor of the driver class. It creates an array of players and initializes player objects to this array.
+     *
      * @param players The number of participating players
      */
     public Driver(int players) {
@@ -62,6 +56,7 @@ public class Driver {
 
     /**
      * This method flips the dice and returns an integer value.
+     *
      * @return A value between 1 to 6 to represent the coin flip
      */
     public static int flipDice() {
@@ -71,7 +66,8 @@ public class Driver {
 
     /**
      * This method prompts the user to input a string.
-     * @param prompt The value inputed by user
+     *
+     * @param prompt The string displayed to the user
      */
     public static void promptUser(String prompt) {
         System.out.println(prompt + ": ");
@@ -80,7 +76,6 @@ public class Driver {
 
     /**
      * This method makes a user order based on their flip dice. If multiple users get the same dice number, the solveTie() method will be triggered. The method also prints out the order of players.
-     *
      */
     private void setOrder() {
         System.out.println("Now deciding which player will start playing...");
@@ -90,10 +85,9 @@ public class Driver {
             int value = flipDice();
             System.out.printf("%s rolled a %d.\n", player.name, value);
 
-//-----------------------------------Why * 10, does it make it easier to sort ? ---------------------------------
             player.order = value * 10;
         }
-//---------------------------------- Please explain me what you did here lord Asil ------------------------------
+
         Arrays.sort(players, Comparator.comparing(p -> -p.order));
 
         // Solve ties
@@ -114,7 +108,8 @@ public class Driver {
     // or false if the array has no ties.
 
     /**
-     * This method solves the first tie it finds, and returns true if there are other ties in the setOrder().
+     * This method solves the first tie it encounters, and returns true if there are other ties in the setOrder().
+     *
      * @return A boolean value is returned based on wheter the tie has been solved
      */
     private boolean solveTies() {
@@ -131,9 +126,10 @@ public class Driver {
 
 
     /**
-     * This method solves the following ties after the first one and solves ties between the current and the preceding player. This method also sorts the player array based on each player's order.
+     * This methods runs through the player array and solves the tie between 2 players. This method also sorts the player array based on a descending order.
+     *
      * @param current A player object which represents the current player
-     * @param next  A player object representing the preceding player
+     * @param next    A player object representing the proceeding player
      */
     private void solveTie(Player current, Player next) {
         System.out.printf("A tie was achieved between %s and %s. Re-rolling...\n", current.name, next.name);
@@ -153,7 +149,8 @@ public class Driver {
 
     /**
      * This method does 1 round of flip dice to each players, move the players to the new positions while taking into considerations snakes and ladders.
-     * @throws GameEnd ?????????????????????????????????????????????????????????????
+     *
+     * @throws GameEnd Throws GameEnd when the win condition is detected
      */
     private void doRound() throws GameEnd {
         for (Player player : players) {
@@ -164,8 +161,7 @@ public class Driver {
 
             if (board.onLadder(player)) {
                 player.ladder(board);
-            }
-            else {
+            } else {
                 System.out.printf("%s went forward %d steps, now on position %d.\n",
                         player.name,
                         diceNumber,
