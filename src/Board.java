@@ -20,7 +20,7 @@ public class Board {
     // Initialize players
 
     /**
-     * Default constuctor of Board which initializes the snakes and ladders positions on the board. The tile position has a ladder if tile[i] is higher than the initial position.
+     * Default constructor of Board which initializes the snakes and ladders positions on the board. The tile position has a ladder if tile[i] is higher than the initial position.
      * The tile position has a snake if tile[i] is lower than the initial position
      */
     public Board() {
