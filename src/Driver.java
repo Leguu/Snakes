@@ -81,10 +81,8 @@ public class Driver {
         for (Player player : players) {
             int value = flipDice();
             System.out.printf("%s rolled a %d.\n", player.name, value);
-
             player.order = value * 10;
         }
-
         Arrays.sort(players, Comparator.comparing(p -> -p.order));
 
         // Solve ties
@@ -149,18 +147,8 @@ public class Driver {
         for (Player player : players) {
             int diceNumber = flipDice();
 
-            player.move(diceNumber);
+            player.move(diceNumber, board);
 
-
-            if (board.onLadder(player)) {
-                player.ladder(board);
-            } else {
-                System.out.printf("%s went forward %d steps, now on position %d.\n",
-                        player.name,
-                        diceNumber,
-                        player.position
-                );
-            }
 
             if (player.position == 100) {
                 throw new GameEnd(player);
@@ -200,6 +188,17 @@ public class Driver {
                 doRound();
             } catch (GameEnd event) {
                 System.out.printf("Game is over! %s has won!\n", event.winner.name);
+
+                // Print out order
+                Arrays.sort(players, Comparator.comparing(p -> -p.position));
+                System.out.print("The order of winners: ");
+                for (int i = 0; i < players.length - 1; i++) {
+                    System.out.printf("%s, ", players[i].name);
+                }
+                System.out.printf("and %s.\n", players[players.length - 1].name);
+
+                board.display(players);
+
                 return;
             }
         }

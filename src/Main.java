@@ -24,12 +24,11 @@ public class Main {
         // Ask for player count
         int playerCount = 0;
 
-
         for (int attempts = 0; playerCount < 2 || 4 < playerCount; attempts += 1) {
 
             if (attempts == 4) {
                 System.out.println("Failed to enter player count 4 times. Exiting...");
-                return;
+                break;
             }
 
             Driver.promptUser("Input the number of players");
@@ -45,9 +44,10 @@ public class Main {
             }
         }
 
-
-        Driver game = new Driver(playerCount);
-        game.play();
+        if (playerCount >= 2 && playerCount <= 4){
+            Driver game = new Driver(playerCount);
+            game.play();
+        }
 
 
         System.out.println("--- Program Terminated ---");

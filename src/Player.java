@@ -28,13 +28,25 @@ public class Player {
      * This method increases the position of the player based on the dice roll.
      * @param dice The number of the dice roll
      */
-    public void move(int dice) {
+    public void move(int dice, Board board) {
         position += dice;
+
         if (position > 100) {
             int excess = position - 100;
-            System.out.printf("%s has rolled %d on position %d,", name, dice, position-dice);
+            System.out.printf("%s has rolled %d on position %d,", name, dice, position - dice);
             position = 100 - excess;
             System.out.printf(" which sends them back to position %d. \n", position);
+        }
+
+        else if (board.onLadder(this)) {
+            ladder(board);
+        }
+        else {
+            System.out.printf("%s went forward %d steps, now on position %d.\n",
+                    name,
+                    dice,
+                    position
+            );
         }
     }
 
