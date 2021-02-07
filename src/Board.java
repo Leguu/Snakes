@@ -2,22 +2,23 @@
  * Asil Erturan (40164714) and Christian Jerjian (40031909)
  * COMP249
  * Assignment #1
- * 2020-02-05
+ * 2020-02-08
  */
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
-
 /**
  * The board class containing all tiles, snakes, ladders positions as well as a display method.
  */
 public class Board {
-    // Contains the snakes / ladders
+    /**
+     * An array whose indices correspond to a position on the board, and contents to a ladder or snake.
+     * <p>
+     * We make no distinction between snakes and ladders; if the tiles[i] value is above your position, it is a snake.
+     */
     private final int[] tiles = new int[101];
-
-    // Initialize players
 
     /**
      * Default constructor of Board which initializes the snakes and ladders positions on the board. The tile position has a ladder if tile[i] is higher than the initial position.
@@ -44,6 +45,7 @@ public class Board {
 
     /**
      * This method returns a boolean which tells you whether or not a player stepped on a ladder or snake.
+     *
      * @param player The player which may have stepped on a ladder or snake
      * @return Returns true if player step on a ladder or snake, and return false if player did not step on a ladder or snake
      */
@@ -53,6 +55,7 @@ public class Board {
 
     /**
      * This method returns the position where the ladder and snakes points to.
+     *
      * @param position The position of ladder and snake
      * @return returns the position of ladder and snake
      */
@@ -62,6 +65,7 @@ public class Board {
 
     /**
      * This method displays the function on the console.
+     *
      * @param players This is the player array which will have their name represented on the display
      */
     public void display(Player[] players) {

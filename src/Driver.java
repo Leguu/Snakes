@@ -2,7 +2,7 @@
  * Asil Erturan (40164714) and Christian Jerjian (40031909)
  * COMP249
  * Assignment #1
- * 2020-02-05
+ * 2020-02-08
  */
 
 import java.util.Arrays;
@@ -14,8 +14,16 @@ import java.util.Scanner;
  * GameEnd class which assigns the winning player to a new player calling winner. The exception is thrown when a player is on top of the 100th tile.
  */
 class GameEnd extends Exception {
+    /**
+     * The winner of the game.
+     */
     public Player winner;
 
+    /**
+     * Default constructor. Sets the winner.
+     *
+     * @param winner The winner of the game.
+     */
     public GameEnd(Player winner) {
         this.winner = winner;
     }
@@ -25,7 +33,13 @@ class GameEnd extends Exception {
  * Driver class containing a board and a the player array.
  */
 public class Driver {
+    /**
+     * Our board which contains snakes and ladders.
+     */
     private final Board board = new Board();
+    /**
+     * Players in our game. The size is set on startup, in main().
+     */
     private final Player[] players;
 
     /**
@@ -41,7 +55,19 @@ public class Driver {
             promptUser("Player " + (i + 1) + ", enter your name");
 
             Scanner s = new Scanner(System.in);
-            String input = s.next();
+            String input = s.nextLine().strip();
+
+            if (input.isEmpty()) {
+                System.out.println("Your name cannot be empty!");
+                i -= 1;
+                continue;
+            }
+
+            if (Arrays.stream(this.players).anyMatch(p -> p != null && p.name.equals(input))) {
+                System.out.println("That name has already been chosen. Try again.");
+                i -= 1;
+                continue;
+            }
 
             this.players[i] = new Player(0, input);
         }
@@ -72,7 +98,9 @@ public class Driver {
     }
 
     /**
-     * This method makes a user order based on their flip dice. If multiple users get the same dice number, the solveTie() method will be triggered. The method also prints out the order of players.
+     * This method makes a user order based on their flip dice.
+     * If multiple users get the same dice number, the solveTie() method will be triggered.
+     * The method also prints out the order of players.
      */
     private void setOrder() {
         System.out.println("Now deciding which player will start playing...");
@@ -115,9 +143,9 @@ public class Driver {
         return false;
     }
 
-
     /**
-     * This methods runs through the player array and solves the tie between 2 players. This method also sorts the player array based on a descending order.
+     * This methods runs through the player array and solves the tie between 2 players.
+     * This method also sorts the player array based on a descending order.
      *
      * @param current A player object which represents the current player
      * @param next    A player object representing the proceeding player
@@ -137,9 +165,9 @@ public class Driver {
         Arrays.sort(players, Comparator.comparing(p -> -p.order));
     }
 
-
     /**
-     * This method does 1 round of flip dice to each players, move the players to the new positions while taking into considerations snakes and ladders.
+     * This method does 1 round of flip dice to each players,
+     * move the players to the new positions while taking into considerations snakes and ladders.
      *
      * @throws GameEnd Throws GameEnd when the win condition is detected
      */
@@ -148,7 +176,6 @@ public class Driver {
             int diceNumber = flipDice();
 
             player.move(diceNumber, board);
-
 
             if (player.position == 100) {
                 throw new GameEnd(player);
